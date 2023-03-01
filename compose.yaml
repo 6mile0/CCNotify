@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  api:
+    container_name: "ccnotify-api"
+    build: .
+    depends_on:
+      - selenium
+    volumes:
+      - ./src:/src
+      - ./data:/data
+    ports:
+      - 3000:3000
+    environment:
+      TZ: Asia/Tokyo
+    links:
+      - selenium
+    command: bash -c "sleep 8 && python getter.py && python main.py"
+
+  selenium:
+    container_name: selenium-chrome
+    image: selenium/standalone-chrome:latest
+    ports:
+      - 4444:4444
+      - 5900:5900
+    shm_size: "2gb"
